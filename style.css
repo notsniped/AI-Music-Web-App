@@ -11,7 +11,6 @@ body {
     color: black;
 }
 .songname_button {
-    width: 180px;
     font-size: 25px;
 }
 canvas {
