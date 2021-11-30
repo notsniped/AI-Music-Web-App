@@ -1,12 +1,13 @@
-song = '';
+song1 = '';
 song2 = '';
 leftWristX = 0;
 leftWristY = 0;
 rightWristX = 0;
 rightWristY = 0;
 scoreleftWrist = 0;
+scorerightWrist = 0;
 function preload() {
-    song = loadSound('music.mp3');
+    song1 = loadSound('music.mp3');
     song2 = loadSound('music2.mp3');
 }
 function setup() {
@@ -21,6 +22,9 @@ function gotPoses(results) {
     if(results.length > 0) {
         console.log(results);
         scoreleftWrist = results[0].pose.keypoints[9].score;
+        scorerightWrist = results[0].pose.keypoints[10].score;
+        console.log('Left Wrist Score = ' + scoreleftWrist)
+        console.log('Right Wrist Score = ' + scorerightWrist)
         // Left Wrist
         leftWristX = results[0].pose.leftWrist.x;
         leftWristY = results[0].pose.leftWrist.y;
@@ -40,15 +44,24 @@ function draw() {
     stroke('#FF0000');
     if (scoreleftWrist > 0.2) {
         circle(leftWristX, leftWristY, 20);
-        InNumberleftWristY = Number(leftWristY);
-        remove_decimal = floor(InNumberleftWristY);
-        volume = remove_decimal/1000;
-        document.getElementById('volume').innerHTML = "Volume = " + volume;
-        song.setVolume(volume);
+        song2.stop();
+        if (song1.isPlaying() == false) {
+            song1.play();
+            document.getElementById('display_current_song_button').innerHTML = 'Song Name: (idk)';
+        }
+    }
+    else if (scorerightWrist > 0.2) {
+        circle(rightWristX, rightWristY, 20);
+        song1.stop();
+        if (song2.isPlaying() == false) {
+            song2.play();
+            document.getElementById('display_current_song_button').innerHTML = 'Song Name: Peter Pan';
+        }
     }
 }
 function play() {
-    song.play();
-    song.setVolume(1);
-    song.rate(1);
+    song2.setVolume(1);
+    song2.rate(1);
+    song1.setVolume(1);
+    song1.rate(1);
 }
